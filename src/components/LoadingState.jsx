@@ -1,0 +1,1 @@
+export default function LoadingState({ fullPage = false }) { return <div className={fullPage ? 'app-loading app-loading--page' : 'app-loading'} role="status"><span className="spinner-border spinner-border-sm" aria-hidden="true" /> Loading…</div>; }

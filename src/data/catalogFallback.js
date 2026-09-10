@@ -1,0 +1,37 @@
+export const categories = [
+  // Main Categories
+  { id: 1, parent_id: 0, slug: 'cardiothoracic-vascular-surgery', name: 'Cardiothoracic & Vascular Surgery', description: 'Advanced equipment for cardiothoracic and vascular surgical procedures.', image: '/assets/images/cat/a.jpg' },
+  { id: 2, parent_id: 0, slug: 'operation-theatre-equipment', name: 'Operation Theatre Equipment', description: 'Surgical lighting, tables and theatre support systems.', image: '/assets/images/cat/b.jpg' },
+  { id: 3, parent_id: 0, slug: 'patient-monitoring', name: 'Patient Monitoring', description: 'Vital-sign monitoring for wards and critical care.', image: '/assets/images/cat/c.jpg' },
+  { id: 4, parent_id: 0, slug: 'icu-critical-care', name: 'ICU & Critical Care', description: 'Life-support and respiratory-care equipment.', image: '/assets/images/cat/d.jpg' },
+  
+  // Sub-categories of Cardiothoracic & Vascular Surgery
+  { id: 10, parent_id: 1, slug: 'perfusion-heart-lung-machine', name: 'Perfusion & Heart Lung Machine', description: 'Perfusion systems and heart-lung machines for cardiopulmonary bypass.', image: '/assets/images/cat/a.jpg' },
+  { id: 11, parent_id: 1, slug: 'surgical-instrumentation', name: 'Surgical Instrumentation', description: 'Specialized instruments for cardiothoracic procedures.', image: '/assets/images/cat/a.jpg' },
+  
+  // Sub-categories of Operation Theatre Equipment
+  { id: 12, parent_id: 2, slug: 'surgical-lights', name: 'Surgical Lights', description: 'High-performance LED surgical lights.', image: '/assets/images/cat/b.jpg' },
+  { id: 13, parent_id: 2, slug: 'surgical-tables', name: 'Surgical Tables', description: 'Advanced surgical operating tables.', image: '/assets/images/cat/b.jpg' },
+];
+export const products = [
+  // Products under Perfusion & Heart Lung Machine (Sub-category of Cardiothoracic & Vascular Surgery)
+  { id: 1, slug: 'heart-lung-machine', category: 'perfusion-heart-lung-machine', name: 'Heart-Lung Machine', short_description: 'Advanced cardiopulmonary bypass system.', description: 'Professional heart-lung machine for cardiopulmonary bypass during cardiac surgery.', image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=85', features: ['Dual pump system', 'Temperature control', 'Blood gas analysis'], specifications: { 'Flow capacity': '0-10 L/min', 'Heater range': '28-42°C', 'Power supply': '220-240V' } },
+  { id: 2, slug: 'perfusion-system', category: 'perfusion-heart-lung-machine', name: 'Perfusion System', short_description: 'Specialized perfusion and oxygenation system.', description: 'Complete perfusion system with integrated oxygenator and heat exchanger.', image: 'https://images.unsplash.com/photo-1576091160597-112173fbb446?auto=format&fit=crop&w=900&q=85', features: ['Integrated oxygenator', 'Heat exchanger', 'Advanced monitoring'], specifications: { Parameters: 'Flow, Temperature, Pressure', Display: '10 inch touchscreen', Battery: 'Up to 8 hours' } },
+  { id: 3, slug: 'cannulae-set', category: 'perfusion-heart-lung-machine', name: 'Arterial & Venous Cannulae Set', short_description: 'Complete cannulation kit for bypass procedures.', description: 'Sterile, single-use cannulae sets for safe arterial and venous access.', image: 'https://images.unsplash.com/photo-1579154204601-01d82b27d100?auto=format&fit=crop&w=900&q=85', features: ['Multiple size options', 'Sterile & single-use', 'Various configurations'], specifications: { Sizes: '14-28 Fr', Material: 'Medical-grade silicone', Sterility: 'Pre-sterilized and certified' } },
+  
+  // Products under Surgical Instrumentation (Sub-category of Cardiothoracic & Vascular Surgery)
+  { id: 4, slug: 'vascular-clamps', category: 'surgical-instrumentation', name: 'Vascular Clamps Set', short_description: 'Precision vascular clamping instruments.', description: 'Complete set of vascular clamps for arterial and venous procedures.', image: 'https://images.unsplash.com/photo-1576091160654-15a3e86d5f9e?auto=format&fit=crop&w=900&q=85', features: ['Precision jaw alignment', 'Non-traumatic design', 'Ergonomic handles'], specifications: { Quantity: '12 pieces per set', Material: 'Stainless steel', Sizes: 'Varied for different vessels' } },
+  { id: 5, slug: 'cardiac-retractors', category: 'surgical-instrumentation', name: 'Cardiac Retractors', short_description: 'Specialized retraction instruments for cardiac surgery.', description: 'Self-retaining retractors designed for optimal cardiac field exposure.', image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=85', features: ['Self-retaining mechanism', 'Variable length options', 'Easy adjustment'], specifications: { Material: 'Stainless steel', 'Blade width': '20-40mm', Finish: 'Mirror polished' } },
+  
+  // Products under Surgical Lights (Sub-category of Operation Theatre Equipment)
+  { id: 6, slug: 'operation-theatre-light', category: 'surgical-lights', name: 'Operation Theatre Light', short_description: 'Focused, shadow-reduced illumination for surgical environments.', description: 'High-performance LED surgical light designed for dependable illumination in modern operation theatres.', image: 'https://images.unsplash.com/photo-1581595219315-a187dd40c322?auto=format&fit=crop&w=900&q=85', features: ['LED illumination', 'Adjustable colour temperature', 'Shadow-reduced light field'], specifications: { 'Light intensity': '160,000 Lux', 'Colour temperature': '3,500–5,000 K', 'Power supply': '220–240 V' } },
+  
+  // Products under Surgical Tables (Sub-category of Operation Theatre Equipment)
+  { id: 7, slug: 'operating-table', category: 'surgical-tables', name: 'Operating Table', short_description: 'Advanced hydraulic surgical operating table.', description: 'Modern hydraulic operating table with electric positioning for enhanced surgical access.', image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=85', features: ['Electric positioning', 'Hydraulic stability', 'Radiolucent design'], specifications: { 'Max load': '250 kg', Dimensions: '2100x650x700-1050 mm', Material: 'Stainless steel top' } },
+  
+  // Products under Patient Monitoring (Main Category)
+  { id: 8, slug: 'multipara-patient-monitor', category: 'patient-monitoring', name: 'Multipara Patient Monitor', short_description: 'Clear, continuous visibility of patient vital signs.', description: 'A clear multi-parameter display for continuous monitoring in wards, emergency rooms and critical care.', image: 'https://images.unsplash.com/photo-1584982751601-97dcc096659c?auto=format&fit=crop&w=900&q=85', features: ['Multi-parameter display', 'Alarm management', 'Trend review'], specifications: { Parameters: 'ECG, SpO₂, NIBP, Respiration', Display: '12 inch colour TFT', Battery: 'Up to 4 hours' } },
+  
+  // Products under ICU & Critical Care (Main Category)
+  { id: 9, slug: 'icu-ventilator', category: 'icu-critical-care', name: 'ICU Ventilator', short_description: 'Dependable respiratory support when every second matters.', description: 'Advanced ventilation support with an intuitive clinical interface for demanding intensive care environments.', image: 'https://images.unsplash.com/photo-1516841273335-e39b37888115?auto=format&fit=crop&w=900&q=85', features: ['Advanced ventilation modes', 'Intuitive clinical interface', 'Integrated monitoring'], specifications: { Modes: 'VCV, PCV, SIMV, CPAP', Display: '12 inch touchscreen', 'Patient type': 'Adult, paediatric and neonatal' } }
+];
