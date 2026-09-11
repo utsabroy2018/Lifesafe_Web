@@ -54,15 +54,6 @@ export default function SiteLayout() {
       .filter((category) => category.products.length > 0)
   }, [categories, products]);
 
-  // Keep each category card in a dedicated column. This avoids grid rows taking
-  // the height of the tallest card and leaving empty space below short lists.
-  const megaMenuColumns = useMemo(() => {
-    const columnCount = 4;
-    return Array.from({ length: columnCount }, (_, columnIndex) =>
-      megaMenuGroups.filter((_, categoryIndex) => categoryIndex % columnCount === columnIndex),
-    );
-  }, [megaMenuGroups]);
-
   return (
     <>
       {/* Top Bar */}
@@ -198,23 +189,19 @@ export default function SiteLayout() {
                                 
                               </Link>
 
-                              {megaMenuColumns.map((column, columnIndex) => (
-                                <div className="mega-menu__category-column" key={columnIndex}>
-                                  {column.map((category) => (
-                                    <div className="mega-menu__column" key={category.id}>
-                                      <Link className="mega-menu__heading" to={`/products/${category.slug}`}>
-                                        {category.name}
-                                      </Link>
+                              {megaMenuGroups.map((category) => (
+                                <div className="mega-menu__column" key={category.id}>
+                                  <Link className="mega-menu__heading" to={`/products/${category.slug}`}>
+                                    {category.name} 
+                                  </Link>
 
-                                      <div className="mega-menu__links">
-                                        {category.products.map((product) => (
-                                          <Link key={product.id} to={`/product/${product.slug}`}>
-                                            {product.name}
-                                          </Link>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  ))}
+                                  <div className="mega-menu__links">
+                                    {category.products.map((product) => (
+                                      <Link key={product.id} to={`/product/${product.slug}`}>
+                                        {product.name}
+                                      </Link>
+                                    ))}
+                                  </div>
                                 </div>
                               ))}
                             </div>

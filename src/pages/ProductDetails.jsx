@@ -43,6 +43,9 @@ export default function ProductDetails() {
   const product = state.data;
   const productFeatures = product.features || [];
   const productSpecifications = product.specifications || {};
+  const viewSiteUrl = /^https?:\/\//i.test(product.viewSiteUrl || '')
+    ? product.viewSiteUrl
+    : '';
 
   const renderSpecValue = (value) => {
     if (Array.isArray(value)) {
@@ -151,6 +154,29 @@ export default function ProductDetails() {
                       className="product-short-description mt-2"
                       dangerouslySetInnerHTML={{ __html: getShortDescriptionHtml_Top() }}
                     />
+
+                {viewSiteUrl && (
+                  <a
+                    className="btn btn-primary mt-4"
+                    href={viewSiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View Site <i className="bi bi-arrow-up-right" />
+                  </a>
+                )}
+
+                {/* Here want to display Product tags */}
+                {product.tags?.length > 0 && (
+                  <div className="mt-3 d-flex flex-wrap align-items-center gap-2">
+                    <span className="fw-semibold manufacture">Manufacture By:</span>
+                    {product.tags.map((tag) => (
+                      <span key={tag.id} className="badge bg-secondary badge_cus">
+                        {tag.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
              
 
               {/* <h3 className="h5 mt-4">

@@ -40,6 +40,16 @@ export async function getPageById(id) {
   );
 }
 
+export async function getProductById(id) {
+  if (!wpRoot || !id) {
+    return null;
+  }
+
+  return getJson(
+    `${wpRoot}/product/${encodeURIComponent(id)}?_fields=acf`
+  );
+}
+
 export async function getMediaById(id) {
   if (!apiRoot || !id) {
     return null;

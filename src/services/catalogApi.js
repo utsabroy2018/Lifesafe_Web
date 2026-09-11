@@ -2,6 +2,7 @@ import axios from 'axios';
 import OAuth from 'oauth-1.0a';
 import CryptoJS from 'crypto-js';
 import { categories as fallbackCategories, products as fallbackProducts } from '../data/catalogFallback';
+import { getProductById } from './wordpressApi';
 
 
 const storeRoot = import.meta.env.VITE_WC_API_URL || 'https://uat.lifesafemedical.org.in/wp/wp-json/wc/v3'; // UAT
@@ -27,23 +28,39 @@ const mapCategory = (item) => ({
   image: item.image?.src || item.image?.thumbnail || '/assets/images/cat/a.jpg',
   count: item.count,
 });
-const mapProduct = (item) => ({
-  id: item.id,
-  slug: item.slug,
-  name: item.name,
-  short_description: item.short_description || '',
-  description: item.description,
-  image: item.images?.[0]?.src || item.images?.[0]?.thumbnail,
-  images: item.images?.map((image) => image.src) || [],
-  category: item.categories?.[0]?.slug,
-  features:
-    item.attributes?.filter((attribute) => attribute.name.toLowerCase() === 'features')[0]?.terms?.map((term) => term.name) || [],
-  specifications: Object.fromEntries(
-    (item.attributes || [])
-      .filter((attribute) => attribute.name.toLowerCase() !== 'features')
-      .map((attribute) => [attribute.name, attribute.terms?.map((term) => term.name).join(', ')]),
-  ),
-});
+const mapProduct = (item) => {
+  const categories = (item.categories || []).map((category) => ({
+    id: category.id,
+    slug: category.slug,
+    name: decodeHtmlEntities(category.name),
+  }));
+
+  return {
+    id: item.id,
+    slug: item.slug,
+    name: item.name,
+    short_description: item.short_description || '',
+    description: item.description,
+    image: item.images?.[0]?.src || item.images?.[0]?.thumbnail,
+    images: item.images?.map((image) => image.src) || [],
+    // Retained for existing product-card display code. Use `categories` when
+    // checking membership because a WooCommerce product can have many categories.
+    category: categories[0]?.slug,
+    categories,
+    tags: (item.tags || []).map((tag) => ({
+      id: tag.id,
+      slug: tag.slug,
+      name: decodeHtmlEntities(tag.name),
+    })),
+    features:
+      item.attributes?.filter((attribute) => attribute.name.toLowerCase() === 'features')[0]?.terms?.map((term) => term.name) || [],
+    specifications: Object.fromEntries(
+      (item.attributes || [])
+        .filter((attribute) => attribute.name.toLowerCase() !== 'features')
+        .map((attribute) => [attribute.name, attribute.terms?.map((term) => term.name).join(', ')]),
+    ),
+  };
+};
 
 const api = axios.create({
   baseURL: proxyRoot ? proxyRoot.replace(/\/$/, '') : storeRoot.replace(/\/$/, ''),
@@ -118,5 +135,13 @@ export async function getProduct(slug) {
   if (!storeRoot && !proxyRoot) return fallbackProducts.find((p) => p.slug === slug) || null;
   const response = await api.get('/products', { params: { slug } });
   const item = Array.isArray(response.data) ? response.data[0] : response.data;
-  return item ? mapProduct(item) : null;
+  if (!item) return null;
+
+  const wordpressProduct = await getProductById(item.id).catch(() => null);
+  const viewSiteUrl = wordpressProduct?.acf?.product_detail?.view_site;
+
+  return {
+    ...mapProduct(item),
+    viewSiteUrl: typeof viewSiteUrl === 'string' ? viewSiteUrl : '',
+  };
 }

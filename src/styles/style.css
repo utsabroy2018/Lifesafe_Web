@@ -1875,7 +1875,7 @@ footer .col-lg-3 span {
 
 .category-dropdown {
     position: absolute;
-    top: calc(100% + .5rem);
+    top: 100%;
     left: 0;
     width: min(360px, calc(100vw - 2rem));
     max-height: min(70vh, 560px);
@@ -1898,6 +1898,16 @@ footer .col-lg-3 span {
     visibility: visible;
     pointer-events: auto;
     transform: translateY(0);
+}
+
+@media (min-width: 992px) {
+    .category-nav-item:hover .category-dropdown,
+    .category-nav-item:focus-within .category-dropdown {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
 }
 
 .category-dropdown--simple {
@@ -1976,7 +1986,8 @@ footer .col-lg-3 span {
 
 .mega-menu {
     position: absolute;
-    top: 100%;
+    /* top: 100%; */
+    top: 70%;
     left: 50%;
     width: min(1180px, calc(100vw - 2rem));
     padding: 1.25rem 0;
@@ -2003,7 +2014,7 @@ footer .col-lg-3 span {
 .mega-menu__grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1.25rem 1.5rem;
+    column-gap: 1.5rem;
 }
 
 .mega-menu__all {
@@ -2016,9 +2027,15 @@ footer .col-lg-3 span {
     font-size: .88rem;
     font-weight: 800;
     border-bottom: 1px solid #e8eff4;
+    margin-bottom: 12px;
 }
 
 .mega-menu__column {
+    min-width: 0;
+    margin-bottom: 1.25rem;
+}
+
+.mega-menu__category-column {
     min-width: 0;
 }
 
@@ -2055,6 +2072,9 @@ footer .col-lg-3 span {
 .inner-intro ul li {
     font-size: 15px;
 }
+
+.manufacture{font-size: 14px; color: #000; font-weight: 600;}
+.badge_custom{font-size: 12px; color: #fff; font-weight: 600; background-color: #852e96; padding: 2px 6px; border-radius: 4px;}
 
 @media (max-width: 991.98px) {
     .mega-menu {
