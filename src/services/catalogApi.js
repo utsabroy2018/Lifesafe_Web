@@ -39,6 +39,7 @@ const mapProduct = (item) => {
     id: item.id,
     slug: item.slug,
     name: item.name,
+    menu_order: Number(item.menu_order) || 0,
     short_description: item.short_description || '',
     description: item.description,
     image: item.images?.[0]?.src || item.images?.[0]?.thumbnail,
@@ -125,7 +126,7 @@ export async function getProducts(categorySlug) {
     if (!categoryId) return [];
   }
 
-  const params = { per_page: 100 };
+  const params = { per_page: 100, orderby: 'menu_order', order: 'asc' };
   if (categoryId) params.category = categoryId;
   const response = await api.get('/products', { params });
   return (response.data || []).map(mapProduct);

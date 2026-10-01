@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import SiteLayout from './layouts/SiteLayout';
 import LoadingState from './components/LoadingState';
 import Branch from './pages/Branch';
+import Disposables_Implants from './pages/Disposables_Implants';
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
@@ -26,6 +27,7 @@ export default function App() {
     <Route path="/our-vision" element={<OurVision />} />
     <Route path="/modern-medical-technology" element={<MedTech />} />
     <Route path="/biomedical-engineering" element={<BME />} />
+    <Route path="/disposables-implants" element={<Disposables_Implants />} />
     <Route path="/branch" element={<Branch />} />
     <Route path="/products" element={<Catalog />} /><Route path="/products/:categorySlug" element={<Listing />} />
     <Route path="/product/:productSlug" element={<Details />} /><Route path="/services" element={<Services />} />

@@ -20,7 +20,7 @@ export default function Contact() {
       </h2>
 
       <div className="row g-5 mt-2">
-        <div className="col-lg-5">
+        <div className="col-lg-12">
                         {/* <p className="eyebrow">LIFE SAFE MEDICAL</p>
                         <h2>Let’s start a <span>useful conversation.</span></h2> */}
                         <p>Speak with our team about medical equipment, service support or a specific project
@@ -39,7 +39,7 @@ export default function Contact() {
 </b><span>Kolkata - 700099, West Bengal</span></div>
                     </div>
 
-        <div className="col-lg-7">
+        {/* <div className="col-lg-7">
                         <div className="contact-form">
                             <div className="row g-3">
   <div className="col-md-6 form-floating">
@@ -111,7 +111,7 @@ export default function Contact() {
   </div>
 </div>
                         </div>
-                    </div>
+                    </div> */}
       </div>
     </ContentPage>
   );

@@ -66,8 +66,11 @@ export default function ProductListing() {
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedProducts = productState.data?.slice(startIndex, endIndex) || [];
-  const totalPages = Math.ceil((productState.data?.length || 0) / ITEMS_PER_PAGE);
+  const orderedProducts = [...(productState.data || [])].sort(
+    (a, b) => (Number(a.menu_order) || 0) - (Number(b.menu_order) || 0),
+  );
+  const paginatedProducts = orderedProducts.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(orderedProducts.length / ITEMS_PER_PAGE);
 
   const title =
     currentCategory?.name || 'Products';

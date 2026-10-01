@@ -7,14 +7,18 @@ const nav = [
   ['/about', 'About Life Safe'],
   ['/products', 'Products'],
   ['/services', 'Services'],
+  ['/branch', 'Branch'],
   ['/customer-list', 'Customer List'],
   // ['/contact', 'Contact Us'],
-  ['/employee-login', 'Employee Login'],
+  // ['https://lsmadmin.opentech4u.co.in/', 'Employee Login'],
 ];
 
 export default function SiteLayout() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [isAboutMenuOpen, setIsAboutMenuOpen] = useState(false);
+  const [isServicesMenuOpen, setIsServicesMenuOpen] = useState(false);
+  const [catalogQuery, setCatalogQuery] = useState('');
 
   useEffect(() => {
     let active = true;
@@ -42,12 +46,37 @@ export default function SiteLayout() {
       .map((category) => ({
         ...category,
         products: products
-          .filter((product) => product.category === category.slug)
-          .slice(0, 16),
+          .filter((product) =>
+            (product.categories || []).some(
+              (productCategory) => productCategory.slug === category.slug,
+            ) || product.category === category.slug,
+          ),
       }))
       .filter((category) => category.products.length > 0)
-      .slice(0, 12);
   }, [categories, products]);
+
+  // Keep each category card in a dedicated column. This avoids grid rows taking
+  // the height of the tallest card and leaving empty space below short lists.
+  const megaMenuColumns = useMemo(() => {
+    const columnCount = 4;
+    return Array.from({ length: columnCount }, (_, columnIndex) =>
+      megaMenuGroups.filter((_, categoryIndex) => categoryIndex % columnCount === columnIndex),
+    );
+  }, [megaMenuGroups]);
+
+  const catalogResults = useMemo(() => {
+    const query = catalogQuery.trim().toLocaleLowerCase();
+    if (query.length < 2) return [];
+    const matchingCategories = categories
+      .filter((category) => category.slug !== 'uncategorized' && category.name.toLocaleLowerCase().includes(query))
+      .slice(0, 5)
+      .map((category) => ({ ...category, type: 'Category', to: `/products/${category.slug}` }));
+    const matchingProducts = products
+      .filter((product) => product.name.toLocaleLowerCase().includes(query))
+      .slice(0, 7)
+      .map((product) => ({ ...product, type: 'Product', to: `/product/${product.slug}` }));
+    return [...matchingCategories, ...matchingProducts];
+  }, [catalogQuery, categories, products]);
 
   return (
     <>
@@ -69,6 +98,7 @@ export default function SiteLayout() {
       <header className="site-header">
         <nav className="navbar navbar-expand-lg">
           <div className="container">
+            {/* {JSON.stringify(megaMenuGroups, null, 2)} */}
             <Link className="navbar-brand" to="/">
               <span className="brand_logo">
                 <img
@@ -93,34 +123,133 @@ export default function SiteLayout() {
             >
               <ul className="navbar-nav ms-auto align-items-lg-center">
                 {nav.map(([to, label]) => {
+
+                  if (label === 'About Life Safe') {
+                    return (
+                      <li className="nav-item category-nav-item nav-link category-nav-item__trigger" key={to}>
+                        {/* <button
+                          type="button"
+                          className="nav-link category-nav-item__trigger"
+                          aria-expanded={isAboutMenuOpen}
+                          aria-controls="about-menu"
+                          onClick={() => {
+                            setIsAboutMenuOpen((isOpen) => !isOpen);
+                          }}
+                        > */}
+                          {label}
+                          <i className={`bi bi-chevron-${isAboutMenuOpen ? 'up' : 'down'}`} />
+                        {/* </button> */}
+
+                        <div
+                          className={`category-dropdown category-dropdown--simple${isAboutMenuOpen ? ' is-open' : ''}`}
+                          id="about-menu"
+                        >
+
+                          <Link to="/about" onClick={() => setIsAboutMenuOpen(false)}>
+                            About Life Safe
+                          </Link>
+
+                          <Link to="/our-mission" onClick={() => setIsAboutMenuOpen(false)}>
+                            Our Mission
+                          </Link>
+                          <Link to="/our-vision" onClick={() => setIsAboutMenuOpen(false)}>
+                            Our Vision
+                          </Link>
+                        </div>
+                      </li>
+                    );
+                  }
+
+                  if (label === 'Services') {
+                    return (
+                      <li className="nav-item category-nav-item nav-link category-nav-item__trigger" key={to}>
+                        {/* <button
+                          type="button"
+                          className="nav-link category-nav-item__trigger"
+                          aria-expanded={isServicesMenuOpen}
+                          aria-controls="services-menu"
+                          onClick={() => {
+                            setIsServicesMenuOpen((isOpen) => !isOpen);
+                            setIsAboutMenuOpen(false);
+                          }}
+                        > */}
+                          {label}
+                          <i className={`bi bi-chevron-${isServicesMenuOpen ? 'up' : 'down'}`} />
+                        {/* </button> */}
+
+                        <div
+                          className={`category-dropdown category-dropdown--simple${isServicesMenuOpen ? ' is-open' : ''}`}
+                          id="services-menu"
+                        >
+
+                          <Link to="/services" onClick={() => setIsServicesMenuOpen(false)}>
+                            Services
+                          </Link>
+
+                          <Link to="/modern-medical-technology" onClick={() => setIsServicesMenuOpen(false)}>
+                            Modern Medical Technology Solutions.
+                          </Link>
+                          <Link to="/biomedical-engineering" onClick={() => setIsServicesMenuOpen(false)}>
+                            Biomedical Engineering
+                          </Link>
+                        </div>
+                      </li>
+                    );
+                  }
+
                   if (label === 'Products') {
                     return (
-                      <li className="nav-item mega-nav-item" key={to}>
+                      <li className="nav-item mega-nav-item category-nav-item__trigger" key={to}>
                         <NavLink end={to === '/'} className="nav-link" to={to}>
                           {label}
+                          <i className={`bi bi-chevron-${isServicesMenuOpen ? 'up' : 'down'}`} />
                         </NavLink>
 
                         <div className="mega-menu">
                           <div className="container">
                             <div className="mega-menu__grid">
-                              {megaMenuGroups.map((category) => (
-                                <div className="mega-menu__column" key={category.id}>
-                                  <Link className="mega-menu__heading" to={`/products/${category.slug}`}>
-                                    {category.name}
-                                  </Link>
+                              <Link className="mega-menu__all" to="/products">
+                                All Products <i className="bi bi-arrow-right" />
+                                
+                              </Link>
 
-                                  <div className="mega-menu__links">
-                                    {category.products.map((product) => (
-                                      <Link key={product.id} to={`/product/${product.slug}`}>
-                                        {product.name}
+                              {megaMenuColumns.map((column, columnIndex) => (
+                                <div className="mega-menu__category-column" key={columnIndex}>
+                                  {column.map((category) => (
+                                    <div className="mega-menu__column" key={category.id}>
+                                      <Link className="mega-menu__heading" to={`/products/${category.slug}`}>
+                                        {category.name}
                                       </Link>
-                                    ))}
-                                  </div>
+
+                                      <div className="mega-menu__links">
+                                        {category.products.map((product) => (
+                                          <Link key={product.id} to={`/product/${product.slug}`}>
+                                            {product.name}
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ))}
                                 </div>
                               ))}
                             </div>
                           </div>
                         </div>
+                      </li>
+                    );
+                  }
+
+                  if (to.startsWith('http')) {
+                    return (
+                      <li className="nav-item" key={to}>
+                        <a
+                          className="nav-link"
+                          href={to}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {label}
+                        </a>
                       </li>
                     );
                   }
@@ -135,8 +264,36 @@ export default function SiteLayout() {
                 })}
               </ul>
 
+              
+              <div className="catalog-search">
+                <label className="visually-hidden" htmlFor="catalog-search-input">Search categories and products</label>
+                <div className="catalog-search__field">
+                  <i className="bi bi-search" aria-hidden="true" />
+                  <input
+                    id="catalog-search-input"
+                    type="search"
+                    value={catalogQuery}
+                    onChange={(event) => setCatalogQuery(event.target.value)}
+                    onKeyDown={(event) => { if (event.key === 'Escape') setCatalogQuery(''); }}
+                    placeholder="Search Products or categories"
+                    autoComplete="off"
+                    aria-controls="catalog-search-results"
+                    aria-expanded={catalogQuery.trim().length >= 2}
+                  />
+                </div>
+                {catalogQuery.trim().length >= 2 && (
+                  <div className="catalog-search__results" id="catalog-search-results" role="listbox">
+                    {catalogResults.length ? catalogResults.map((result) => (
+                      <Link key={`${result.type}-${result.id}`} to={result.to} role="option" onClick={() => setCatalogQuery('')}>
+                        <span>{result.name}</span><small>{result.type}</small>
+                      </Link>
+                    )) : <p>No matching categories or products.</p>}
+                  </div>
+                )}
+              </div>
+
               <Link
-                className="btn btn-primary ms-lg-3"
+                className="btn btn_cus btn-primary ms-lg-3"
                 to="/contact"
               >
                 Request Quote <i className="bi bi-arrow-up-right" />

@@ -10,7 +10,7 @@ const nav = [
   ['/branch', 'Branch'],
   ['/customer-list', 'Customer List'],
   // ['/contact', 'Contact Us'],
-  ['https://lsmadmin.opentech4u.co.in/', 'Employee Login'],
+  // ['https://lsmadmin.opentech4u.co.in/', 'Employee Login'],
 ];
 
 export default function SiteLayout() {
@@ -18,6 +18,9 @@ export default function SiteLayout() {
   const [products, setProducts] = useState([]);
   const [isAboutMenuOpen, setIsAboutMenuOpen] = useState(false);
   const [isServicesMenuOpen, setIsServicesMenuOpen] = useState(false);
+  const [isProductsMenuOpen, setIsProductsMenuOpen] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [catalogQuery, setCatalogQuery] = useState('');
 
   useEffect(() => {
     let active = true;
@@ -63,6 +66,20 @@ export default function SiteLayout() {
     );
   }, [megaMenuGroups]);
 
+  const catalogResults = useMemo(() => {
+    const query = catalogQuery.trim().toLocaleLowerCase();
+    if (query.length < 2) return [];
+    const matchingCategories = categories
+      .filter((category) => category.slug !== 'uncategorized' && category.name.toLocaleLowerCase().includes(query))
+      .slice(0, 5)
+      .map((category) => ({ ...category, type: 'Category', to: `/products/${category.slug}` }));
+    const matchingProducts = products
+      .filter((product) => product.name.toLocaleLowerCase().includes(query))
+      .slice(0, 7)
+      .map((product) => ({ ...product, type: 'Product', to: `/product/${product.slug}` }));
+    return [...matchingCategories, ...matchingProducts];
+  }, [catalogQuery, categories, products]);
+
   return (
     <>
       {/* Top Bar */}
@@ -96,14 +113,16 @@ export default function SiteLayout() {
             <button
               className="navbar-toggler"
               type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#mainNav"
+              aria-expanded={isNavOpen}
+              aria-controls="mainNav"
+              aria-label={isNavOpen ? 'Close navigation' : 'Open navigation'}
+              onClick={() => setIsNavOpen((isOpen) => !isOpen)}
             >
-              <i className="bi bi-list" />
+              <i className={`bi bi-${isNavOpen ? 'x-lg' : 'list'}`} />
             </button>
 
             <div
-              className="collapse navbar-collapse"
+              className={`navbar-collapse${isNavOpen ? ' show' : ''}`}
               id="mainNav"
             >
               <ul className="navbar-nav ms-auto align-items-lg-center">
@@ -111,33 +130,31 @@ export default function SiteLayout() {
 
                   if (label === 'About Life Safe') {
                     return (
-                      <li className="nav-item category-nav-item nav-link category-nav-item__trigger" key={to}>
-                        {/* <button
+                      <li className="nav-item category-nav-item" key={to}>
+                        <button
                           type="button"
-                          className="nav-link category-nav-item__trigger"
+                          className="nav-link"
                           aria-expanded={isAboutMenuOpen}
                           aria-controls="about-menu"
-                          onClick={() => {
-                            setIsAboutMenuOpen((isOpen) => !isOpen);
-                          }}
-                        > */}
+                          onClick={() => { setIsAboutMenuOpen((isOpen) => !isOpen); setIsServicesMenuOpen(false); }}
+                        >
                           {label}
                           <i className={`bi bi-chevron-${isAboutMenuOpen ? 'up' : 'down'}`} />
-                        {/* </button> */}
+                        </button>
 
                         <div
                           className={`category-dropdown category-dropdown--simple${isAboutMenuOpen ? ' is-open' : ''}`}
                           id="about-menu"
                         >
 
-                          <Link to="/about" onClick={() => setIsAboutMenuOpen(false)}>
+                          <Link to="/about" onClick={() => { setIsAboutMenuOpen(false); setIsNavOpen(false); }}>
                             About Life Safe
                           </Link>
 
-                          <Link to="/our-mission" onClick={() => setIsAboutMenuOpen(false)}>
+                          <Link to="/our-mission" onClick={() => { setIsAboutMenuOpen(false); setIsNavOpen(false); }}>
                             Our Mission
                           </Link>
-                          <Link to="/our-vision" onClick={() => setIsAboutMenuOpen(false)}>
+                          <Link to="/our-vision" onClick={() => { setIsAboutMenuOpen(false); setIsNavOpen(false); }}>
                             Our Vision
                           </Link>
                         </div>
@@ -147,34 +164,35 @@ export default function SiteLayout() {
 
                   if (label === 'Services') {
                     return (
-                      <li className="nav-item category-nav-item nav-link category-nav-item__trigger" key={to}>
-                        {/* <button
+                      <li className="nav-item category-nav-item" key={to}>
+                        <button
                           type="button"
-                          className="nav-link category-nav-item__trigger"
+                          className="nav-link"
                           aria-expanded={isServicesMenuOpen}
                           aria-controls="services-menu"
-                          onClick={() => {
-                            setIsServicesMenuOpen((isOpen) => !isOpen);
-                            setIsAboutMenuOpen(false);
-                          }}
-                        > */}
+                          onClick={() => { setIsServicesMenuOpen((isOpen) => !isOpen); setIsAboutMenuOpen(false); }}
+                        >
                           {label}
                           <i className={`bi bi-chevron-${isServicesMenuOpen ? 'up' : 'down'}`} />
-                        {/* </button> */}
+                        </button>
 
                         <div
                           className={`category-dropdown category-dropdown--simple${isServicesMenuOpen ? ' is-open' : ''}`}
                           id="services-menu"
                         >
 
-                          <Link to="/services" onClick={() => setIsServicesMenuOpen(false)}>
+                          <Link to="/services" onClick={() => { setIsServicesMenuOpen(false); setIsNavOpen(false); }}>
                             Services
                           </Link>
 
-                          <Link to="/modern-medical-technology" onClick={() => setIsServicesMenuOpen(false)}>
+                          <Link to="/disposables-implants" onClick={() => { setIsServicesMenuOpen(false); setIsNavOpen(false); }}>
+                            Disposables & Implants
+                          </Link>
+
+                          <Link to="/modern-medical-technology" onClick={() => { setIsServicesMenuOpen(false); setIsNavOpen(false); }}>
                             Modern Medical Technology Solutions.
                           </Link>
-                          <Link to="/biomedical-engineering" onClick={() => setIsServicesMenuOpen(false)}>
+                          <Link to="/biomedical-engineering" onClick={() => { setIsServicesMenuOpen(false); setIsNavOpen(false); }}>
                             Biomedical Engineering
                           </Link>
                         </div>
@@ -184,10 +202,13 @@ export default function SiteLayout() {
 
                   if (label === 'Products') {
                     return (
-                      <li className="nav-item mega-nav-item category-nav-item__trigger" key={to}>
-                        <NavLink end={to === '/'} className="nav-link" to={to}>
+                      <li className="nav-item mega-nav-item category-nav-item__trigger" key={to} 
+                      aria-expanded={setIsProductsMenuOpen}
+                      onClick={() => { setIsProductsMenuOpen((isOpen) => !isOpen); setIsServicesMenuOpen(false); setIsAboutMenuOpen(false); }}
+                      >
+                      <NavLink end={to === '/'} className="nav-link" to={to} onClick={() => { setIsNavOpen(false); setIsProductsMenuOpen(false); }}>
                           {label}
-                          <i className={`bi bi-chevron-${isServicesMenuOpen ? 'up' : 'down'}`} />
+                          <i className={`bi bi-chevron-${isProductsMenuOpen ? 'up' : 'down'}`} />
                         </NavLink>
 
                         <div className="mega-menu">
@@ -241,7 +262,7 @@ export default function SiteLayout() {
 
                   return (
                     <li className="nav-item" key={to}>
-                      <NavLink end={to === '/'} className="nav-link" to={to}>
+                      <NavLink end={to === '/'} className="nav-link" to={to} onClick={() => setIsNavOpen(false)}>
                         {label}
                       </NavLink>
                     </li>
@@ -249,8 +270,36 @@ export default function SiteLayout() {
                 })}
               </ul>
 
+              
+              <div className="catalog-search">
+                <label className="visually-hidden" htmlFor="catalog-search-input">Search categories and products</label>
+                <div className="catalog-search__field">
+                  <i className="bi bi-search" aria-hidden="true" />
+                  <input
+                    id="catalog-search-input"
+                    type="search"
+                    value={catalogQuery}
+                    onChange={(event) => setCatalogQuery(event.target.value)}
+                    onKeyDown={(event) => { if (event.key === 'Escape') setCatalogQuery(''); }}
+                    placeholder="Search Products or categories"
+                    autoComplete="off"
+                    aria-controls="catalog-search-results"
+                    aria-expanded={catalogQuery.trim().length >= 2}
+                  />
+                </div>
+                {catalogQuery.trim().length >= 2 && (
+                  <div className="catalog-search__results" id="catalog-search-results" role="listbox">
+                    {catalogResults.length ? catalogResults.map((result) => (
+                      <Link key={`${result.type}-${result.id}`} to={result.to} role="option" onClick={() => setCatalogQuery('')}>
+                        <span>{result.name}</span><small>{result.type}</small>
+                      </Link>
+                    )) : <p>No matching categories or products.</p>}
+                  </div>
+                )}
+              </div>
+
               <Link
-                className="btn btn-primary ms-lg-3"
+                className="btn btn_cus btn-primary ms-lg-3 custom_request_quote_btn"
                 to="/contact"
               >
                 Request Quote <i className="bi bi-arrow-up-right" />
