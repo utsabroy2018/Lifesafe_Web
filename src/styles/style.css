@@ -1757,7 +1757,7 @@ a {
 }
 
 .map-placeholder {
-    height: 165px;
+    height: 300px;
     margin-top: 2rem;
     border-radius: 15px;
     background: linear-gradient(135deg, #d8efff, #f9fdff);

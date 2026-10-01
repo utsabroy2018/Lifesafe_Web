@@ -410,10 +410,15 @@ export default function Home() {
               <div><span>Email us</span><a href="mailto:lifesafemedical2017@gmail.com">lifesafemedical2017@gmail.com</a>
               </div>
             </div>
-            <div class="map-placeholder"><i class="bi bi-geo-alt-fill"></i><b>1211, East Santoshpur, Mukundapur, Purba Jadavpur,
+            
+          </div>
+
+          <div className="col-lg-7" data-aos="fade-left">
+          <div class="map-placeholder"><i class="bi bi-geo-alt-fill"></i><b>1211, East Santoshpur, Mukundapur, Purba Jadavpur,
 </b><span>Kolkata - 700099, West Bengal</span></div>
           </div>
-          <div className="col-lg-7" data-aos="fade-left">
+
+          {/* <div className="col-lg-7" data-aos="fade-left">
             <form className="contact-form" id="enquiryForm" onSubmit={handleContactSubmit}>
               <div className="row g-3">
                 <input type="hidden" name="_wpcf7" value={contactFormId} />
@@ -471,7 +476,7 @@ export default function Home() {
                 </div>
               </div>
             </form>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

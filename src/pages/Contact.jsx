@@ -20,7 +20,7 @@ export default function Contact() {
       </h2>
 
       <div className="row g-5 mt-2">
-        <div className="col-lg-12">
+        <div className="col-lg-5">
                         {/* <p className="eyebrow">LIFE SAFE MEDICAL</p>
                         <h2>Let’s start a <span>useful conversation.</span></h2> */}
                         <p>Speak with our team about medical equipment, service support or a specific project
@@ -35,7 +35,11 @@ export default function Contact() {
                         <div className="contact-detail"><i className="bi bi-clock"></i>
                             <div><span>Working hours</span><a href="#">Mon–Sat, 9:30 AM–6:30 PM</a></div>
                         </div>
-                        <div className="map-placeholder"><i className="bi bi-geo-alt-fill"></i><b>1211, East Santoshpur, Mukundapur, Purba Jadavpur,
+                        
+                    </div>
+
+                    <div className="col-lg-7">
+                      <div className="map-placeholder" style={{marginTop:0}}><i className="bi bi-geo-alt-fill"></i><b>1211, East Santoshpur, Mukundapur, Purba Jadavpur,
 </b><span>Kolkata - 700099, West Bengal</span></div>
                     </div>
 
